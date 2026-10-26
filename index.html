@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Website rebuild — before and after</title>
+<style>
+  :root { --ink:#16202b; --muted:#5b6b7a; --line:#dde5ec; --bg:#f7f9fb; --accent:#0b6b5d; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+         font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+  .wrap { max-width:960px; margin:0 auto; padding:56px 24px 80px; }
+  h1 { font-size:clamp(28px,4vw,40px); line-height:1.15; margin:0 0 12px; letter-spacing:-0.02em; }
+  .lede { font-size:18px; color:var(--muted); margin:0 0 40px; max-width:62ch; }
+  h2 { font-size:13px; text-transform:uppercase; letter-spacing:0.09em; color:var(--muted);
+       margin:56px 0 16px; font-weight:600; }
+  .shot { background:#fff; border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  .shot img { display:block; width:100%; height:auto; }
+  .cap { padding:12px 16px; font-size:13px; color:var(--muted); border-top:1px solid var(--line); }
+  .grid { display:grid; gap:24px; grid-template-columns:1fr; }
+  @media (min-width:760px){ .grid.two { grid-template-columns:1fr 1fr; } }
+  .metrics { display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); margin:24px 0 0; }
+  .metric { background:#fff; border:1px solid var(--line); border-radius:10px; padding:16px; }
+  .metric b { display:block; font-size:24px; letter-spacing:-0.01em; }
+  .metric span { font-size:13px; color:var(--muted); }
+  ul { padding-left:20px; }
+  li { margin:6px 0; }
+  .note { font-size:14px; color:var(--muted); border-left:3px solid var(--accent);
+          padding:2px 0 2px 16px; margin:24px 0; }
+  footer { margin-top:64px; padding-top:20px; border-top:1px solid var(--line);
+           font-size:14px; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>A page rebuilt from a live site, then graded against the original</h1>
+  <p class="lede">One command reads a live website, re-derives its content and design tokens, and
+  emits a self-contained static site. The output is then measured against the original with hard
+  numbers — content recall, image coverage, overflow, link targets — instead of an opinion.</p>
+
+  <h2>Source and rebuild</h2>
+  <div class="grid two">
+    <div class="shot">
+      <img src="img/before.png" alt="The original live site as captured">
+      <div class="cap">Original — captured from the live site at 1440×900</div>
+    </div>
+    <div class="shot">
+      <img src="img/after.png" alt="The rebuilt site">
+      <div class="cap">Rebuild — generated, self-contained static page</div>
+    </div>
+  </div>
+
+  <div class="metrics">
+    <div class="metric"><b>100%</b><span>content recall</span></div>
+    <div class="metric"><b>15 / 0 / 0</b><span>checks pass / warn / fail</span></div>
+    <div class="metric"><b>8 / 8</b><span>distinct images placed</span></div>
+    <div class="metric"><b>38.9s</b><span>wall time, one command</span></div>
+  </div>
+
+  <div class="note">
+    Measured on this machine, start to finish, including downloading every asset and grading the
+    result in a real browser. Times vary with asset download size — this one is a single-page site.
+  </div>
+
+  <h2>What the rebuild changes</h2>
+  <ul>
+    <li>Output is semantic HTML plus one generated stylesheet — no framework, no build step.</li>
+    <li>Palette, typeface and base size are read from the source, not invented.</li>
+    <li>Layout is responsive by construction: fluid type, collapsing grids, contained overflow.</li>
+    <li>Every asset is copied locally, so the page runs with no server.</li>
+    <li>Result is reproducible — re-running on the same input returns a byte-identical page.</li>
+  </ul>
+
+  <h2>What it does not do</h2>
+  <ul>
+    <li>It rebuilds the entry page only. Linked sub-pages are kept as links, not rebuilt.</li>
+    <li>The design is re-derived, not pixel-copied. A pixel copy of a broken site is still broken.</li>
+    <li>Section intent (gallery vs logo strip) is inferred and worth a human glance.</li>
+    <li>Roughly five minutes of visual review per site — three defects in this build were only
+        visible by looking, not from the numbers.</li>
+  </ul>
+
+  <footer>
+    Built and verified with a dependency-free Node pipeline driving headless Chrome over the
+    DevTools Protocol. Screenshots on this page are the actual captures from that run.
+  </footer>
+
+</div>
+</body>
+</html>
